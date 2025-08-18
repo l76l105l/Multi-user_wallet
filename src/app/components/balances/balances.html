@@ -1,21 +1,23 @@
 <main>
+  <!--Button to go back to the main page-->
   <a class="back-btn" [routerLink]="['/']"
     ><img
       src="left-arrow.svg"
       alt="Image of arrow directed left used as a button to go back to the main page"
   /></a>
+
+  <!--Main heading of the page-->
   <h1 class="page-heading">Balances</h1>
 
+  <!--Display for non-admin users-->
   @if(currentUser.currentUser.login !== 'ADMIN') {
+  <!--Main content for non-admin users-->
   <section class="table-container w-170">
-    <h2 class="sub-page-heading">
-      Balance:
-      <span class="font-normal text-[var(--text-page-content)]"
-        >{{ currentUser.currentUser.balance }} сум</span
-      >
-    </h2>
+    <h2 class="sub-page-heading">Balance: <span class="font-normal text-[var(--text-page-content)]">{{ currentUser.currentUser.balance }} сум</span></h2>
     <h2 class="sub-page-heading">Recent operations</h2>
+    <!--Display if the user has any operations-->
     @if(userOperations.length>0){
+      <!--Table with content-->
       <table class="customized-table">
         <thead>
           <tr>
@@ -39,15 +41,20 @@
         </tbody>
       </table>
     }
+    <!--Display if the user does not have any operations yet-->
     @else{
       <p class="text-[var(--text-page-content)] text-2xl text-center">No any recent operations yet :/</p>
     }
   </section>
   } 
+  <!--Display for admin user-->
   @else if(currentUser.currentUser.login === 'ADMIN') {
+  <!--Main content for admin user-->
   <section class="table-container w-200">
     <h2 class="sub-page-heading">Balances of all users:</h2>
+    <!--Dsplay if 'users' array is not empty (users exists)-->
     @if(users.length > 0) {
+    <!--Table with content-->
     <table class="customized-table">
       <thead>
         <tr>
@@ -64,10 +71,10 @@
         }
       </tbody>
     </table>
-    } @else{
-    <p class="text-[var(--text-page-content)] text-2xl text-center">
-      No users yet :\
-    </p>
+    }
+    <!--Display if there no any users yet-->
+    @else{
+    <p class="text-[var(--text-page-content)] text-2xl text-center">No users yet :\</p>
     }
   </section>
   }

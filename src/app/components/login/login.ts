@@ -12,13 +12,19 @@ import { loginAndPasswordValidator } from '../../custom-validation-functions/pas
   styleUrl: './login.css'
 })
 export class Login {
-  private router=inject(Router);
-  private formBuilder=inject(FormBuilder);
-  private currentUser=inject(CurrentUserService);
-  private users: UserInterface[] = localStorage.getItem('Users') ? JSON.parse(localStorage.getItem('Users')!) : [];
 
+  //Router instance used for navigating to the main page after login
+  private router=inject(Router);
+  //FormBuilder instance used to create form fields using FormBuilder API
+  private formBuilder=inject(FormBuilder);
+  //CurrentUser instance used to track who is the current user
+  private currentUser=inject(CurrentUserService);
+  //'users' array that contains all the users. Gets value from localStorage 'Users' elements
+  private users: UserInterface[] = localStorage.getItem('Users') ? JSON.parse(localStorage.getItem('Users')!) : [];
+  //variable used to change the visiability of the password (show the content of the password or no)
   show=signal<boolean>(false);
 
+  //FormGroup and FormControls
   loginForm = this.formBuilder.group({
 
     login: ['', {
@@ -31,6 +37,7 @@ export class Login {
 
   },{validators: [loginAndPasswordValidator(this.users)]});
 
+  //main function, that sets the current user
   getUser():void{
     this.currentUser.currentUser=this.users.find(user=>user.login===this.loginForm.controls.login.value!)!;
     this.router.navigate(['/']);
