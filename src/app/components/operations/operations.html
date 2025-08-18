@@ -1,0 +1,124 @@
+<main>
+  <a class="back-btn" [routerLink]="['/']"><img src="left-arrow.svg" alt="Image of the arrow directed left used as a button to go back to the main page" /></a>
+  <h1 class="page-heading">Operations</h1>
+  @if(currentUser.currentUser.login !== 'ADMIN'){
+    <section class="flex justify-around flex-wrap">
+    <div class="form-container">
+        <h2 class="sub-page-heading">Transfer</h2>
+        <p class="text-center text-lg text-[var(--text-page-content)] font-bold m-2">Balance: <span class="font-normal">{{currentUser.currentUser.balance}} сум</span></p>
+        <form class="flex flex-col" [formGroup]="operationForm" (submit)="transfer()">
+            <input class="input-field" type="text" placeholder="Login" formControlName="loginToTransfer">
+            <div class="error-container">
+              @if(operationForm.controls.loginToTransfer.invalid && operationForm.controls.loginToTransfer.dirty){
+                @if(operationForm.controls.loginToTransfer.errors?.['required']){
+                  <small>*Please specify the user's login!</small>
+                }
+                @else if(operationForm.controls.loginToTransfer.errors?.['pattern']){
+                  <small>*Login must contain only LATIN letters without any spaces!</small>
+                }
+              }
+              @else if(operationForm.controls.loginToTransfer.valid){
+                @if(operationForm.errors?.['loginToTransferNotExist']){
+                  <small>*There is no user with login "{{operationForm.controls.loginToTransfer.value}}"!</small>
+                }
+                @else if(operationForm.errors?.['loginToTransferMatchCurrentLogin']){
+                  <small>*You cannot trasfer money to yourself!</small>
+                }
+                @else{
+                  <small class="text-green-500">*Varified user</small>
+                }
+              }
+            </div>
+
+            <input class="input-field" type="number" placeholder="Amount" formControlName="amountToTransfer">
+            <div class="error-container">
+              @if(operationForm.controls.amountToTransfer.errors?.['required'] && operationForm.controls.amountToTransfer.dirty && !operationForm.errors?.['loginToTransferNotExist'] && !operationForm.errors?.['loginToTransferMatchCurrentLogin']){
+                <small>*Transition amount cannot be empty!</small>
+              }
+              @if(operationForm.errors?.['amountIsZero']){
+                <small>*Transition amount cannot be zero!</small>
+              }
+              @if(operationForm.errors?.['notSufficientBalace']){
+                <small>*Not sufficient balance!</small>
+              }
+            </div>
+            <button class="primary-btn" [disabled]="operationForm.invalid" type="submit">Transfer</button>
+        </form>
+    </div>
+    <div class="table-container w-170">
+      <h2 class="sub-page-heading">Monitoring</h2>
+      @if (userOperations.length>0) {
+        <table class="customized-table">
+          <thead>
+            <tr>
+              <th class="rounded-tl-2xl">From</th>
+              <th>To</th>
+              <th>Amount</th>
+              <th>Date & Time</th>
+              <th class="rounded-tr-2xl"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(operation of operations; track $index){
+              @if(operation.from === currentUser.currentUser.login || operation.to === currentUser.currentUser.login){
+                <tr>
+                  <td>{{ operation.from }}</td>
+                  <td>{{ operation.to }}</td>
+                  <td>{{ operation.amount }}</td>
+                  <td>{{ operation.dateTime }}</td>
+                  <td><img class="w-8 mx-auto" src="/trash.svg" alt="Image of the trash used as a button to delete an operation" (click)="deleteOp($index)"></td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      }
+      @else {
+        <p class="text-[var(--text-page-content)] text-2xl text-center">No operations yet :/</p>
+      }
+    </div>
+  </section>
+  }
+  @else if(currentUser.currentUser.login === 'ADMIN'){
+    <section class="table-container w-200">
+      <h2 class="sub-page-heading">Monitoring</h2>
+      @if(operations.length > 0) {
+        <table class="customized-table">
+          <thead>
+            <tr>
+              <th class="rounded-tl-2xl"></th>
+              <th>From</th>
+              <th>To</th>
+              <th>Amount</th>
+              <th>Date & Time</th>
+              <th class="rounded-tr-2xl"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(operation of operations; track $index) {
+            <tr>
+              <td>{{ $index + 1 }}</td>
+              <td>{{ operation.from }}</td>
+              <td>{{ operation.to }}</td>
+              <td>{{ operation.amount }} сум</td>
+              <td>{{ operation.dateTime }}</td>
+              <td>
+                <img
+                  class="w-8 mx-auto"
+                  src="/trash.svg"
+                  alt="Image of the trash icon used as a button to delete an operation "
+                  (click)="deleteOp($index)"
+                />
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+        } 
+  
+        @else {
+        <p class="text-[var(--text-page-content)] text-2xl text-center">No operations yet :\</p>
+        }
+    </section>
+  }
+</main>

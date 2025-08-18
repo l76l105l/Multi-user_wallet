@@ -1,0 +1,112 @@
+<main class="h-screen flex items-center">
+  <a class="back-btn" [routerLink]="['/']"><img src="left-arrow.svg" alt="Image of the arrow directed left used as a button to go back to the main page" /></a>
+  <div class="form-container">
+    <h1 class="page-heading">Registration</h1>
+
+    <form class="flex flex-col" [formGroup]="profileForm" (submit)="createNewUser()">
+      <!--First name-->
+      <input class="input-field" type="text" placeholder="First name" formControlName="firstName" />
+      <div class="error-container">
+        @if(profileForm.controls.firstName.invalid && profileForm.controls.firstName.dirty){
+          @if(profileForm.controls.firstName.errors?.['required']){
+            <small>*First name cannot be empty</small>
+          } 
+          @else if(profileForm.controls.firstName.errors?.['pattern']){
+            <small>*First name must contain only LATIN letters without any spaces!</small>
+          } 
+          @else if(profileForm.controls.firstName.errors?.['minlength']){
+            <small>*First name must contain at least 3 symbols!</small>
+          } 
+        }
+      </div>
+
+      <!--Last name-->
+      <input class="input-field" type="text" placeholder="Last name" formControlName="lastName" />
+      <div class="error-container">
+        @if(profileForm.controls.lastName.invalid&&profileForm.controls.lastName.dirty){
+          @if(profileForm.controls.lastName.errors?.['required']){
+            <small>*Last name cannot be empty!</small>
+          }
+          @else if(profileForm.controls.lastName.errors?.['pattern']){
+            <small>*Last name must contain only LATIN letters without any spaces!</small>
+          }
+          @else if(profileForm.controls.lastName.errors?.['minlength']){
+            <small>*Last name must contain at least 3 symbols!</small>
+          } 
+        }
+      </div>
+
+      <!--Login-->
+      <input class="input-field" type="text" placeholder="Login" formControlName="login" />
+      <div class="error-container">
+        @if(profileForm.controls.login.invalid && profileForm.controls.login.dirty){
+          @if(profileForm.controls.login.errors?.['required']){
+            <small>*Login cannot be empty!</small>
+          }
+          @else if(profileForm.controls.login.errors?.['pattern']){
+            <small>*Login must contain only LATIN letters without any spaces!</small>
+          }
+          @else if(profileForm.controls.login.errors?.['minlength']){
+            <small>*Login must contain at least 3 symbols!</small>
+          }
+          @if(profileForm.controls.login.errors?.['loginNotUnique']){
+            <small>*User with the same login already exists!</small>
+          }
+        }
+        @else if(profileForm.controls.login.valid){
+          <small class="text-green-500">*This login is available</small>
+        }
+      </div>
+
+      <!--Password-->
+      <div class="flex">
+        <input
+          class="input-field w-[50%]"
+          [type]="show() ? 'text' : 'password'"
+          placeholder="Password"
+          formControlName="password"
+        />
+        <img
+          class="w-6 m-2"
+          [src]="show() ? 'password-eye.svg' : 'password-eye-closed.svg'"
+          [alt]="show() ? 'Image of the opened eye used as a button to show the content of the password':'Image of the closed eye used as a button to hide the content of the password'"
+          (click)="show.set(!show())"
+        />
+      </div>
+      <div class="error-container">
+        @if(profileForm.controls.password.invalid && profileForm.controls.password.dirty){
+          @if(profileForm.controls.password.errors?.['required']){
+            <small>*Password field cannot be empty!</small>
+          }
+          @else if(profileForm.controls.password.errors?.['minlength']){
+            <small>*Password must contain at least 3 symbols!</small>
+          } 
+        }
+      </div>
+
+      <!--Password confrimation-->
+      <div>
+        <input
+          class="input-field w-[50%]" 
+          [type]="show()? 'text':'password'"
+          placeholder="Confrim password"
+          formControlName="passwordConfrim"
+        />
+      </div>
+      <div class="error-container">
+        @if(profileForm.controls.password.valid && profileForm.controls.passwordConfrim.dirty && profileForm.controls.passwordConfrim.errors?.['required'] && profileForm.controls.password.dirty){
+            <small>*Please confrim your password!</small>
+        }
+        @else if(profileForm.errors?.['passwordsDoNotMatch'] && profileForm.controls.passwordConfrim.dirty){
+          <small>*Passwords do not match!</small>
+         }
+      </div>
+
+      <!--Submit button-->
+      <button class="primary-btn" [disabled]="profileForm.invalid" type="submit">Register</button>
+
+    </form>
+    
+    <p class="text-[var(--text-page-content)] text-center">Already have an account? <a class="text-[var(--text-page-heading)] underline" [routerLink]="['/login']">Login</a></p>
+  </div>
+</main>

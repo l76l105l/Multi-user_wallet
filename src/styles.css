@@ -1,1 +1,72 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+:root {
+  --bg-primary-color: #1e1e2e;
+  --bg-secondary-color: #2e3440;
+  --text-page-heading: #81a1c1;
+  --text-page-content: #b0bec5;
+  --bg-button-primary: #3b4252;
+  --shadow-button-primary: #4c566a;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--bg-primary-color)]; 
+  }
+}
+
+@layer components {
+  .back-btn {
+    @apply absolute top-0 left-0 flex items-center bg-[var(--text-page-content)] w-7 p-1 pr-1.5 m-2 rounded-full;
+  }
+  .form-container {
+    @apply w-130 h-fit rounded-4xl flex flex-col mx-auto p-8 bg-[var(--bg-secondary-color)];
+  }
+  .table-container{
+    @apply h-fit rounded-4xl flex flex-col mx-auto p-8 bg-[var(--bg-secondary-color)];
+  }
+  .page-heading {
+    @apply text-4xl text-[var(--text-page-heading)] font-bold text-center my-5;
+  }
+  .sub-page-heading {
+    @apply text-white font-bold text-2xl text-center mb-3;
+  }
+  .input-field {
+    @apply bg-white p-3 text-xl rounded-full text-center placeholder-[var(--text-page-content)];
+  }
+  .customized-table {
+    @apply border-collapse bg-white text-center rounded-2xl mb-5;
+    thead {
+      @apply bg-gray-300 text-gray-600 uppercase text-sm;
+      tr {
+        th {
+          @apply px-6 py-3;
+        }
+      }
+    }
+    tbody {
+      tr {
+        @apply hover:bg-gray-200 hover:scale-105 transition-colors divide-x;
+        td {
+          @apply px-6 py-3;
+        }
+      }
+    }
+  }
+  .error-container {
+    @apply flex h-5 text-red-500 font-bold;
+  }
+  .primary-btn {
+    @apply bg-[var(--bg-button-primary)] text-gray-300 font-bold p-3 w-40 rounded-4xl mx-auto my-2 shadow-[0_4px_0_var(--shadow-button-primary)];
+  }
+  .primary-btn:hover {
+    @apply cursor-pointer -translate-y-1 transition-all duration-200 ease-in-out shadow-[0_8px_0_var(--shadow-button-primary)];
+  }
+  .primary-btn:active {
+    @apply shadow-[0_0_0_var(--shadow-button-primary)] text-white translate-y-1 bg-[var(--shadow-button-primary)];
+  }
+  .primary-btn:disabled {
+    @apply bg-gray-700 text-gray-800 shadow-none translate-y-1;
+  }
+}

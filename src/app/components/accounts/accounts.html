@@ -1,0 +1,75 @@
+<main>
+  <a class="back-btn" [routerLink]="['/']"
+    ><img src="left-arrow.svg" alt="Image of the arrow directed left used as a button to go back to the main page"
+  /></a>
+  @if(currentUser.currentUser.login !== 'ADMIN'){
+  <h1 class="page-heading">Account</h1>
+  <section
+    class="w-130 h-fit rounded-4xl flex flex-col mx-auto p-8 bg-[var(--bg-secondary-color)]"
+  >
+    <h2 class="sub-page-heading">
+      Welcome! {{ currentUser.currentUser.firstName.toUpperCase() }}
+      {{ currentUser.currentUser.lastName.toUpperCase() }}
+    </h2>
+
+    <div>
+      <p class="text-[var(--text-page-content)] text-2xl font-bold mb-2">
+        Login:
+        <span class="font-normal">@{{ currentUser.currentUser.login }}</span>
+      </p>
+      <p class="text-[var(--text-page-content)] text-2xl font-bold mb-2">
+        Balance:
+        <span class="font-normal"
+          >{{ currentUser.currentUser.balance }} сум</span
+        >
+      </p>
+    </div>
+
+    <a
+      class="underline text-[var(--text-page-heading)]"
+      [routerLink]="['/operations']"
+      >Add operation</a
+    >
+
+    <button class="primary-btn" (click)="currentUser.quitAccount()">
+      Quit Account
+    </button>
+  </section>
+  } 
+  @else if(currentUser.currentUser.login === 'ADMIN'){
+  <h1 class="page-heading">Accounts</h1>
+  <section class="table-container w-200">
+    <h2 class="sub-page-heading">Users registred:</h2>
+    @if(users.length > 0) {
+    <table class="customized-table">
+      <thead>
+        <tr>
+          <th class="rounded-tl-2xl">Login</th>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Password</th>
+          <th class="rounded-tr-2xl"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(user of users; track $index) {
+        <tr>
+          <td>{{ user.login }}</td>
+          <td>{{ user.firstName.toUpperCase() }}</td>
+          <td>{{ user.lastName.toUpperCase() }}</td>
+          <td>{{ user.password }}</td>
+          <td>
+            <img class="w-8 mx-auto" src="/trash.svg" alt="Image of the trash icon used as a button to delete a user" (click)="deleteAcc($index)"/>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    } 
+    @else {
+    <p class="text-[var(--text-page-content)] text-2xl text-center mb-5">No users yet :\</p>
+    }
+    <a class="text-[var(--text-page-heading)] underline text-center" [routerLink]="['/registration']">Create a new account</a>
+  </section>
+  }
+</main>

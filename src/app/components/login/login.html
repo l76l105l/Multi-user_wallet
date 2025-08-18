@@ -1,0 +1,72 @@
+<main class="h-screen flex items-center">
+    <a class="back-btn" [routerLink]="['/']"><img src="left-arrow.svg" alt="Image of the arrow directed left used as a button to go back to the main page" /></a>
+    <div class="form-container">
+      <h1 class="page-heading">Login</h1>
+      <form
+        class="flex flex-col"
+        [formGroup]="loginForm"
+        (submit)="getUser()"
+      >
+      
+        <!--Login-->
+        <input
+          class="input-field"
+          type="text"
+          placeholder="Login"
+          formControlName="login"
+        />
+        <div class="error-container">
+            @if(loginForm.controls.login.invalid && loginForm.controls.login.dirty){
+              @if(loginForm.controls.login.errors?.['required']){
+                <small>*Login cannot be empty!</small>
+              }
+              @else if(loginForm.controls.login.errors?.['pattern']){
+                <small>*Login must contain only LATIN letters without any spaces!</small>
+              }
+            }
+            @else if(loginForm.controls.login.valid){
+              @if(loginForm.errors?.['loginNotExist']){
+                <small>*There is no user with login "{{loginForm.controls.login.value}}"!</small>
+              }
+              @else{
+                <small class="text-green-500">*Varified user</small>
+              }
+            }
+        </div>
+  
+        <!--Password-->
+        <div class="flex">
+          <input
+            class="input-field w-[50%]"
+            [type]="show()? 'text':'password'"
+            placeholder="Password"
+            formControlName="password"
+          />
+          <img
+            class="w-6 m-2"
+            [src]="show() ? 'password-eye.svg' : 'password-eye-closed.svg'"
+            (click)="show.set(!show())"
+            [alt]="show() ? 'Image of the openned eye used as a button to show the content of the password':'Image of the closed eye used as a button to hide the content of the password '"
+          />
+        </div>
+        <div class="error-container">
+          @if(!loginForm.errors?.['loginNotExist'] && loginForm.controls.password.errors?.['required'] && loginForm.controls.password.dirty){
+              <small>*Password field cannot be empty!</small>
+          }
+          @else if(loginForm.errors?.['passwordNotMatchLogin'] && loginForm.controls.password.dirty){
+            <small>*Wrong password!</small>
+          } 
+        </div>
+  
+        <!--Submit button-->
+        <button class="primary-btn" [type]="loginForm.invalid? 'button':'submit'" [disabled]="loginForm.invalid">
+          Login
+        </button>
+        
+      </form>
+  
+      <p class="text-[var(--text-page-content)] text-center">Do not have account? <a class="text-[var(--text-page-heading)] underline" [routerLink]="['/registration']">Register</a>
+      </p>
+    </div>
+  </main>
+  

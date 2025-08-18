@@ -1,0 +1,31 @@
+<header class="flex flex-wrap gap-5 items-center justify-between bg-[var(--bg-secondary-color)] rounded-4xl p-8 mx-8 my-5">
+
+    <h2 class="text-[var(--text-page-heading)] text-4xl font-bold">*logo*</h2>
+
+    @if(currentUser.currentUser.login !== 'ADMIN') {
+      <nav>
+        <ul class="flex gap-5 text-lg">
+          <li class="hover:text-blue-500 text-[var(--text-page-content)]"><a [routerLink]="['accounts', currentUser.currentUser.login]">My Account</a></li>
+          <li class="hover:text-blue-500 text-[var(--text-page-content)]"><a [routerLink]="['/operations']">Operations</a></li>
+          <li class="hover:text-blue-500 text-[var(--text-page-content)]"><a [routerLink]="['/balances']">Balance</a></li>
+        </ul>
+      </nav>
+    } 
+    @else if(currentUser.currentUser.login === 'ADMIN') {
+      <nav>
+        <ul class="flex gap-5 text-lg">
+          <li class="hover:text-blue-500 text-[var(--text-page-content)]"><a [routerLink]="['/operations']">Operations</a></li>
+          <li class="hover:text-blue-500 text-[var(--text-page-content)]"><a [routerLink]="['/balances']">Balances</a></li>
+          <li class="hover:text-blue-500 text-[var(--text-page-content)]"><a [routerLink]="['/accounts']">Accounts</a></li>
+          <li class="text-[var(--text-page-content)]"><a class="hover:text-blue-500" [routerLink]="['/login']">Login</a> | <a class="hover:text-blue-500" [routerLink]="['/registration']"> Registration</a></li>
+        </ul>
+      </nav>
+    }
+  </header>
+  
+  <main>
+    <h1 class="page-heading">This is the main page</h1>
+    <p class="text-[var(--text-page-content)] text-2xl text-center mb-5">All the primary content is going to be stored here</p>
+  </main>
+  
+  

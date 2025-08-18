@@ -1,0 +1,74 @@
+<main>
+  <a class="back-btn" [routerLink]="['/']"
+    ><img
+      src="left-arrow.svg"
+      alt="Image of arrow directed left used as a button to go back to the main page"
+  /></a>
+  <h1 class="page-heading">Balances</h1>
+
+  @if(currentUser.currentUser.login !== 'ADMIN') {
+  <section class="table-container w-170">
+    <h2 class="sub-page-heading">
+      Balance:
+      <span class="font-normal text-[var(--text-page-content)]"
+        >{{ currentUser.currentUser.balance }} сум</span
+      >
+    </h2>
+    <h2 class="sub-page-heading">Recent operations</h2>
+    @if(userOperations.length>0){
+      <table class="customized-table">
+        <thead>
+          <tr>
+            <th class="rounded-tl-2xl">From</th>
+            <th>To</th>
+            <th>Amount</th>
+            <th class="rounded-tr-2xl">Date & Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(operation of operations; track $index){
+          @if(currentUser.currentUser.login === operation.from ||
+          currentUser.currentUser.login === operation.to){
+          <tr>
+            <td>{{ operation.from }}</td>
+            <td>{{ operation.to }}</td>
+            <td>{{ operation.amount }}</td>
+            <td>{{ operation.dateTime }}</td>
+          </tr>
+          } }
+        </tbody>
+      </table>
+    }
+    @else{
+      <p class="text-[var(--text-page-content)] text-2xl text-center">No any recent operations yet :/</p>
+    }
+  </section>
+  } 
+  @else if(currentUser.currentUser.login === 'ADMIN') {
+  <section class="table-container w-200">
+    <h2 class="sub-page-heading">Balances of all users:</h2>
+    @if(users.length > 0) {
+    <table class="customized-table">
+      <thead>
+        <tr>
+          <th class="rounded-tl-2xl">Login</th>
+          <th class="rounded-tr-2xl">Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users; track $index) {
+        <tr>
+          <td>{{ user.login }}</td>
+          <td>{{ user.balance }} сум</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    } @else{
+    <p class="text-[var(--text-page-content)] text-2xl text-center">
+      No users yet :\
+    </p>
+    }
+  </section>
+  }
+</main>
