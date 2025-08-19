@@ -1,16 +1,16 @@
 <header class="flex flex-wrap gap-5 items-center justify-between bg-[var(--bg-secondary-color)] rounded-4xl p-8 mx-8 my-5">
-
     <h2 class="text-[var(--text-page-heading)] text-4xl font-bold">*logo*</h2>
-
+    <!--Display for non-admin users-->
     @if(currentUser.currentUser.login !== 'ADMIN') {
       <nav>
         <ul class="flex gap-5 text-lg">
-          <li class="hover:text-blue-500 text-[var(--text-page-content)]"><a [routerLink]="['accounts', currentUser.currentUser.login]">My Account</a></li>
+          <li class="hover:text-blue-500 text-[var(--text-page-content)]"><a [routerLink]="['/accounts', currentUser.currentUser.login]">My Account</a></li>
           <li class="hover:text-blue-500 text-[var(--text-page-content)]"><a [routerLink]="['/operations']">Operations</a></li>
           <li class="hover:text-blue-500 text-[var(--text-page-content)]"><a [routerLink]="['/balances']">Balance</a></li>
         </ul>
       </nav>
     } 
+    <!--Display for admin user-->
     @else if(currentUser.currentUser.login === 'ADMIN') {
       <nav>
         <ul class="flex gap-5 text-lg">

@@ -1,6 +1,9 @@
 <main class="h-screen flex items-center">
+  <!--Button to go back to the main page-->
     <a class="back-btn" [routerLink]="['/']"><img src="left-arrow.svg" alt="Image of the arrow directed left used as a button to go back to the main page" /></a>
+    <!--Main container of the page. Contains the form input-->
     <div class="form-container">
+      <!--Main heading of the page-->
       <h1 class="page-heading">Login</h1>
       <form
         class="flex flex-col"
@@ -15,6 +18,7 @@
           placeholder="Login"
           formControlName="login"
         />
+        <!--Container with errors-->
         <div class="error-container">
             @if(loginForm.controls.login.invalid && loginForm.controls.login.dirty){
               @if(loginForm.controls.login.errors?.['required']){
@@ -49,6 +53,7 @@
             [alt]="show() ? 'Image of the openned eye used as a button to show the content of the password':'Image of the closed eye used as a button to hide the content of the password '"
           />
         </div>
+        <!--container with errors-->
         <div class="error-container">
           @if(!loginForm.errors?.['loginNotExist'] && loginForm.controls.password.errors?.['required'] && loginForm.controls.password.dirty){
               <small>*Password field cannot be empty!</small>
@@ -64,7 +69,8 @@
         </button>
         
       </form>
-  
+
+      <!--If the user does not have an account he can create it by following this link-->
       <p class="text-[var(--text-page-content)] text-center">Do not have account? <a class="text-[var(--text-page-heading)] underline" [routerLink]="['/registration']">Register</a>
       </p>
     </div>

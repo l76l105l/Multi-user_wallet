@@ -1,46 +1,44 @@
 <main>
+  <!--Button to go back to the main page-->
   <a class="back-btn" [routerLink]="['/']"
     ><img src="left-arrow.svg" alt="Image of the arrow directed left used as a button to go back to the main page"
   /></a>
+  <!--Display if the user is not ADMIN-->
   @if(currentUser.currentUser.login !== 'ADMIN'){
+  <!--Main heading of the page for non-admin users-->
   <h1 class="page-heading">Account</h1>
-  <section
-    class="w-130 h-fit rounded-4xl flex flex-col mx-auto p-8 bg-[var(--bg-secondary-color)]"
-  >
-    <h2 class="sub-page-heading">
-      Welcome! {{ currentUser.currentUser.firstName.toUpperCase() }}
-      {{ currentUser.currentUser.lastName.toUpperCase() }}
-    </h2>
+  <!--Main content of the page for non-admin users-->
+  <section class="w-130 h-fit rounded-4xl flex flex-col mx-auto p-8 bg-[var(--bg-secondary-color)]">
+    <!--Heading of the section-->
+    <h2 class="sub-page-heading">Welcome! {{ currentUser.currentUser.firstName.toUpperCase() }} {{ currentUser.currentUser.lastName.toUpperCase() }}</h2>
 
+    <!--Login and balance info-->
     <div>
-      <p class="text-[var(--text-page-content)] text-2xl font-bold mb-2">
-        Login:
-        <span class="font-normal">@{{ currentUser.currentUser.login }}</span>
-      </p>
-      <p class="text-[var(--text-page-content)] text-2xl font-bold mb-2">
-        Balance:
-        <span class="font-normal"
-          >{{ currentUser.currentUser.balance }} сум</span
-        >
-      </p>
+      <p class="text-[var(--text-page-content)] text-2xl font-bold mb-2">Login: <span class="font-normal">@{{ currentUser.currentUser.login }}</span></p>
+      <p class="text-[var(--text-page-content)] text-2xl font-bold mb-2">Balance: <span class="font-normal">{{ currentUser.currentUser.balance }} сум</span></p>
     </div>
 
-    <a
-      class="underline text-[var(--text-page-heading)]"
-      [routerLink]="['/operations']"
-      >Add operation</a
-    >
+    <!--Link to the 'operations' page-->
+    <a class="underline text-[var(--text-page-heading)]" [routerLink]="['/operations']">Add operation</a>
 
-    <button class="primary-btn" (click)="currentUser.quitAccount()">
-      Quit Account
-    </button>
+    <!--Link to the 'balances' page-->
+    <a class="underline text-[var(--text-page-heading)]" [routerLink]="['/balances']">View my balance info</a>
+
+    <!--Button to quit the account-->
+    <button class="primary-btn" (click)="currentUser.quitAccount()">Quit Account</button>
   </section>
   } 
+  <!--Display if the user is ADMIN-->
   @else if(currentUser.currentUser.login === 'ADMIN'){
+  <!--Main heading of the page for the admin user-->
   <h1 class="page-heading">Accounts</h1>
+  <!--Main content of the page for admin users-->
   <section class="table-container w-200">
+    <!--Heading of the section-->
     <h2 class="sub-page-heading">Users registred:</h2>
+    <!--If the 'users' array is not empty-->
     @if(users.length > 0) {
+    <!--table with user's name, login and password-->
     <table class="customized-table">
       <thead>
         <tr>
@@ -66,9 +64,12 @@
       </tbody>
     </table>
     } 
+    <!--It the 'users' array is empty-->
     @else {
     <p class="text-[var(--text-page-content)] text-2xl text-center mb-5">No users yet :\</p>
     }
+
+    <!--Link to the 'registration' page-->
     <a class="text-[var(--text-page-heading)] underline text-center" [routerLink]="['/registration']">Create a new account</a>
   </section>
   }
