@@ -8,19 +8,23 @@ import { OperationInterface } from "../../interfaces/operation-interface";
         <table class="customized-table w-full">
         <thead>
             <tr>
-                <th class="rounded-tl-2xl">From</th>
+                <th  class="rounded-tl-2xl"></th>
+                <th>From</th>
                 <th>To</th>
                 <th>Amount</th>
-                <th class="rounded-tr-2xl">Date & Time</th>
+                <th>Date & Time</th>
+                <th  class="rounded-tr-2xl"></th>
             </tr>
         </thead>
         <tbody>
             @for(operation of filteredOPerations(); track $index){
                 <tr>
+                    <td>{{$index+1}}</td>
                     <td>{{operation.from}}</td>
                     <td>{{operation.to}}</td>
                     <td>{{operation.amount}}</td>
                     <td>{{operation.dateTime}}</td>
+                    <td><img class="w-8 mx-auto" src="/trash.svg" alt=""></td>
                 </tr>
             }
         </tbody>

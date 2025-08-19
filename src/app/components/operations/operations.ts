@@ -29,7 +29,7 @@ export class Operations {
   //FormBuilder instance used to create form fields using FormBuilder API
   private users: UserInterface[] = JSON.parse(localStorage.getItem('Users') ?? '[]');
 
-  //FormGroup and FormControls
+  //Form input that takes the login to whon the transition will go and the amount to send
   operationForm=this.formBuilder.group({
     loginToTransfer: ['',{
       validators:[Validators.required, Validators.pattern(/^[a-zA-Z]*$/)],
@@ -41,6 +41,7 @@ export class Operations {
 
   },{validators: [operationValidator(this.users , this.currentUser)]});
 
+  //Variables for the filtration of the 'operations' array. Filter by login, from amount and to amount
   loginSearch:string='';
   fromSearch:number|null=null;
   toSearch:number|null=null;

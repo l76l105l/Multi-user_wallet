@@ -127,21 +127,20 @@
             }
           </tbody>
         </table>
-        } 
-        <!--Display if the 'operations' array is empty-->
-      @else {
-        <p class="text-[var(--text-page-content)] text-2xl text-center">No operations yet :\</p>
-        }
-
         <h2 class="sub-page-heading">Search for operation</h2>
-      <div class="flex justify-center items-center gap-2 mb-4">
+        <div class="flex justify-center items-center gap-2 mb-4">
           <input class="input-field w-[30%] h-10" placeholder="Name:" type="text" [(ngModel)]="loginSearch">
           <label class="text-[var(--text-page-content)] font-bold" for="from">From: </label>
           <input class="input-field w-[20%] h-10" id="from" placeholder="From:" type="number" [(ngModel)]="fromSearch">
           <label class="text-[var(--text-page-content)] font-bold" for="to">To: </label>
           <input class="input-field w-[20%] h-10" id="to" placeholder="To:" type="number" [(ngModel)]="toSearch">     
-      </div>
-      <filtered-operations [operations]="operations" [login]="loginSearch" [from]="fromSearch!" [to]="toSearch!"></filtered-operations>
-    </section>
+        </div>
+        <filtered-operations [operations]="operations" [login]="loginSearch" [from]="fromSearch!" [to]="toSearch!"></filtered-operations>
+        } 
+        <!--Display if the 'operations' array is empty-->
+      @else {
+        <p class="text-[var(--text-page-content)] text-2xl text-center">No operations yet :\</p>
+        }
+      </section>
   }
 </main>
