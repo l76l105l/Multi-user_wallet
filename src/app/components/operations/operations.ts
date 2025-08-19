@@ -1,15 +1,16 @@
 import { Component, inject } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators, FormsModule, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, FormsModule } from '@angular/forms';
 import { UserInterface } from '../../interfaces/user-interface';
 import { OperationInterface } from '../../interfaces/operation-interface';
 import { CurrentUserService } from '../../services/current-user-service';
 import { operationValidator} from '../../custom-validation-functions/operation-validator';
 import { RouterLink } from '@angular/router';
+import { FilteredOperations } from './filteredOperations';
 
 
 @Component({
   selector: 'app-operations',
-  imports: [ReactiveFormsModule, RouterLink, FormsModule],
+  imports: [ReactiveFormsModule, RouterLink, FormsModule, FilteredOperations],
   templateUrl: './operations.html',
   styleUrl: './operations.css'
 })
@@ -39,37 +40,9 @@ export class Operations {
 
   },{validators: [operationValidator(this.users , this.currentUser)]});
 
-  searchForm = this.formBuilder.group({
-    searchByName: [''],
-    searchByAmountFrom: [null],
-    searchByAmountTo: [null],
-  });
-
-  //method to filter operations
-  search(){
-    if(this.searchForm.controls.searchByName.value && this.searchForm.controls.searchByAmountFrom.value !== null && this.searchForm.controls.searchByAmountTo.value !==null){
-      this.filteredOperations=this.operations.filter(
-        operation => 
-          (operation.from.includes(this.searchForm.controls.searchByName.value!) || operation.to.includes(this.searchForm.controls.searchByName.value!)) && 
-          (operation.amount >= Number(this.searchForm.controls.searchByAmountFrom.value) && operation.amount<=Number(this.searchForm.controls.searchByAmountTo.value))
-      )
-    }
-    else if(!this.searchForm.controls.searchByName.value && this.searchForm.controls.searchByAmountFrom.value !== null && this.searchForm.controls.searchByAmountTo.value !==null){
-      this.filteredOperations = this.operations.filter(
-        operation => 
-          operation.amount >= Number(this.searchForm.controls.searchByAmountFrom.value) && operation.amount<=Number(this.searchForm.controls.searchByAmountTo.value)
-      )
-    }
-    else if(this.searchForm.controls.searchByName.value && this.searchForm.controls.searchByAmountFrom.value === null && this.searchForm.controls.searchByAmountTo.value ===null){
-      this.filteredOperations=this.operations.filter(
-        operation => 
-          operation.from.includes(this.searchForm.controls.searchByName.value!) || operation.to.includes(this.searchForm.controls.searchByName.value!)
-      )
-    }
-    else{
-      this.filteredOperations=[...this.operations]
-    }
-  }
+  loginSearch:string='';
+  fromSearch:number|null=null;
+  toSearch:number|null=null;
 
   //method to transfer some amount to another user
   transfer(){

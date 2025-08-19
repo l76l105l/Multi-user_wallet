@@ -135,40 +135,15 @@
 
 <!-------------------------------------------------------------------------------------------------------------------------------------------------------->
       <h2 class="sub-page-heading">Search for operation</h2>
-      <label class="text-[var(--text-page-content)] text-lg font-bold">Filters</label>
-        <form class="flex justify-center gap-2 mb-4" [formGroup]="searchForm" (submit)="search()">
-            <input class="input-field w-[40%]" placeholder="Name:" type="text" formControlName="searchByName">
-            <input class="input-field w-[20%]" id="from" placeholder="From:" type="number" formControlName="searchByAmountFrom">
-            <input class="input-field w-[20%]" id="tos" placeholder="To:" type="number" formControlName="searchByAmountTo">     
-            <button class="primary-btn" type="submit">Search</button>  
-        </form>
+      <div class="flex justify-center items-center gap-2 mb-4">
+          <input class="input-field w-[30%] h-10" placeholder="Name:" type="text" [(ngModel)]="loginSearch">
+          <label class="text-[var(--text-page-content)] font-bold" for="from">From: </label>
+          <input class="input-field w-[20%] h-10" id="from" placeholder="From:" type="number" [(ngModel)]="fromSearch">
+          <label class="text-[var(--text-page-content)] font-bold" for="to">To: </label>
+          <input class="input-field w-[20%] h-10" id="to" placeholder="To:" type="number" [(ngModel)]="toSearch">     
+      </div>
+      <filtered-operations [operations]="operations" [login]="loginSearch" [from]="fromSearch!" [to]="toSearch!"></filtered-operations>
 
-        @if(filteredOperations.length>0){
-          <table class="customized-table">
-            <thead>
-              <tr>
-                <th class="rounded-tl-2xl">From</th>
-                <th>To</th>
-                <th>Amount</th>
-                <th class="rounded-tr-2xl">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for(operation of filteredOperations; track $index){
-                <tr>
-                  <td>{{operation.from}}</td>
-                  <td>{{operation.to}}</td>
-                  <td>{{operation.amount}}</td>
-                  <td>{{operation.dateTime}}</td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        }
-        @else {
-          <p class="text-[var(--text-page-content)] text-2xl text-center">There is no such operations :/</p>
-        }
-  
     </section>
   }
 </main>
