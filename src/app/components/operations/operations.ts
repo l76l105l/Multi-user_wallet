@@ -8,6 +8,7 @@ import { RouterLink } from '@angular/router';
 import { FilteredOperations } from './filteredOperations';
 
 
+
 @Component({
   selector: 'app-operations',
   imports: [ReactiveFormsModule, RouterLink, FormsModule, FilteredOperations],
