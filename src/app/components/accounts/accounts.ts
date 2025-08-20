@@ -24,36 +24,48 @@ export class Accounts {
     //contains the reference to the user we need to delete from the'users' array 
     const userToDelete:UserInterface = this.users[userToDeleteIndex];
 
-    //contains all the operations connected with this user
-    const userToDeleteOperations:OperationInterface[] = this.operations.filter(operation => operation.from === userToDelete.login || operation.to === userToDelete.login);
+    //contains filtered list of operations  (without operations connected with 'userToDelete')
+    const filteredOperations: OperationInterface[] = [];
 
-    //goes through of each userToDeleteOpearations ot change the balance of the sender or receiver
-    for(let i=0; i<userToDeleteOperations.length; i++){
-      //'from' stores the reference to the user who initiated the transition
-      const from:UserInterface = this.users.find(user => user.login === userToDeleteOperations[i].from)!;
-      //'to' stores the reference to the user who received the transition
-      const to:UserInterface = this.users.find(user => user.login === userToDeleteOperations[i].to)!;
-      //if the operation was from the user we need to delete
-      if(from.login === userToDelete.login){
-        //we take the reciever and decrease its balance back
-        to.balance = to.balance - userToDeleteOperations[i].amount;
+    //contains all the operations connected with 'userToDelete'
+    const userToDeleteOperations:OperationInterface[] = [];
+
+    for(const operation of this.operations) {
+      if(operation.from === userToDelete.login || operation.to === userToDelete.login){
+         userToDeleteOperations.push(operation);
       }
-      //if the operation was to the user we want to delete
-      else if(to.login === userToDelete.login){
-        //we take the sender and increase its balance back
-        from.balance = from.balance + userToDeleteOperations[i].amount;
+      else{
+        filteredOperations.push(operation);
       }
+    };
+    this.operations = filteredOperations;
+    localStorage.setItem("Operations", JSON.stringify(this.operations));
+
+
+      for(const userToDeleteOperation of userToDeleteOperations){
+        let from: UserInterface|undefined;
+        let to: UserInterface|undefined;
+        for(const user of this.users){          
+          if(user.login === userToDeleteOperation.from) from = user;
+          else if(user.login === userToDeleteOperation.to) to = user;
+          if(from && to) break;
+        }
+  
+        if(!from || !to) continue;
+  
+        //if the operation was from the user we need to delete
+        if(from.login === userToDelete.login){
+          //we take the reciever and decrease its balance back
+          to.balance = to.balance - userToDeleteOperation.amount;
+        }
+        //if the operation was to the user we want to delete
+        else if(to.login === userToDelete.login){
+          //we take the sender and increase its balance back
+          from.balance = from.balance + userToDeleteOperation.amount;
+        }
     }
 
-
-    //removing the user we need to delete from 'users' array by filtering
-    this.users = this.users.filter(user => user !== userToDelete);
-    //after modifying the 'users' array and its elements we update the 'Users' element in localStorage
+    this.users = this.users.filter(user=>user !== userToDelete);
     localStorage.setItem('Users', JSON.stringify(this.users));
-
-    //removing all operations connected with the deleted user from the 'operations' array by filtering
-    this.operations=this.operations.filter(operation => operation.from !== userToDelete.login && operation.to !== userToDelete.login);
-    //after modifying the 'operations' array we update the 'Operations' element in localStorage
-    localStorage.setItem("Operations", JSON.stringify(this.operations));
   }
 }

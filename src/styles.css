@@ -23,7 +23,7 @@
     font-style: normal;
   }
   .back-btn {
-    @apply absolute top-0 left-0 flex items-center bg-[var(--text-page-content)] w-7 p-1 pr-1.5 m-2 rounded-full;
+    @apply absolute top-0 left-0 flex items-center bg-[var(--text-page-content)] w-7 h-6 p-1 pr-1.5 m-2 rounded-full;
   }
   .form-container {
     @apply w-130 h-fit rounded-4xl flex flex-col mx-auto p-8 bg-[var(--bg-secondary-color)];
