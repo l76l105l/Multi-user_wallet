@@ -24,7 +24,7 @@ import { OperationInterface } from "../../interfaces/operation-interface";
                     <td>{{operation.to}}</td>
                     <td>{{operation.amount}}</td>
                     <td>{{operation.dateTime}}</td>
-                    <td><img class="w-8 h-8 mx-auto" src="/trash.svg" alt=""></td>
+                    <td><img class="w-8 h-8 mx-auto" src="trash.svg" alt=""></td>
                 </tr>
             }
         </tbody>

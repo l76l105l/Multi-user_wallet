@@ -74,7 +74,7 @@
                   <td>{{ operation.to }}</td>
                   <td>{{ operation.amount }}</td>
                   <td>{{ operation.dateTime }}</td>
-                  <td><img class="w-8 h-8 mx-auto" src="/trash.svg" alt="Image of the trash used as a button to delete an operation" (click)="deleteOp($index)"></td>
+                  <td><img class="w-8 h-8 mx-auto" src="trash.svg" alt="Image of the trash used as a button to delete an operation" (click)="deleteOp($index)"></td>
                 </tr>
               }
             }
@@ -135,7 +135,7 @@
           <label class="text-[var(--text-page-content)] font-bold" for="to">To: </label>
           <input class="input-field w-[20%] h-10" id="to" placeholder="To:" type="number" [(ngModel)]="toSearch">     
         </div>
-        <filtered-operations [operations]="operations" [login]="loginSearch" [from]="fromSearch!" [to]="toSearch!"></filtered-operations>
+        <filtered-operations [operations]="operations" [login]="loginSearch" [from]="fromSearch" [to]="toSearch"></filtered-operations>
         } 
         <!--Display if the 'operations' array is empty-->
       @else {

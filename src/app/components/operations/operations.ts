@@ -43,8 +43,8 @@ export class Operations {
 
   //Variables for the filtration of the 'operations' array. Filter by login, from amount and to amount
   loginSearch:string='';
-  fromSearch:number|null=null;
-  toSearch:number|null=null;
+  fromSearch:number|undefined;
+  toSearch:number|undefined;
 
   //method to transfer some amount to another user
   transfer(){
