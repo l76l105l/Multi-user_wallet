@@ -1,76 +1,166 @@
-<main>
-  <!--Button to go back to the main page-->
-  <a class="back-btn" [routerLink]="['/']"
-    ><img src="left-arrow.svg" alt="Image of the arrow directed left used as a button to go back to the main page"
-  /></a>
-  <!--Display if the user is not ADMIN-->
-  @if(currentUser.currentUser.login !== 'ADMIN'){
-  <!--Main heading of the page for non-admin users-->
-  <h1 class="page-heading">Account</h1>
-  <!--Main content of the page for non-admin users-->
-  <section class="w-130 h-fit rounded-4xl flex flex-col mx-auto p-8 bg-[var(--bg-secondary-color)]">
-    <!--Heading of the section-->
-    <h2 class="sub-page-heading">Welcome! {{ currentUser.currentUser.firstName.toUpperCase() }} {{ currentUser.currentUser.lastName.toUpperCase() }}</h2>
-
-    <!--Login and balance info-->
-    <div>
-      <p class="text-[var(--text-page-content)] text-2xl font-bold mb-2">Login: <span class="font-normal">@{{ currentUser.currentUser.login }}</span></p>
-      <p class="text-[var(--text-page-content)] text-2xl font-bold mb-2">Balance: <span class="font-normal">{{ currentUser.currentUser.balance }} сум</span></p>
+<div class="min-h-screen bg-[var(--bg-primary-color)] pb-12">
+  <!-- Top Navigation Bar -->
+  <header class="bg-white/80 backdrop-blur-md border-b border-[var(--border-color)] sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <a class="flex items-center justify-center bg-white border border-[var(--border-color)] hover:bg-slate-50 text-slate-500 hover:text-[var(--accent-color)] w-9 h-9 rounded-full transition-all shadow-sm" [routerLink]="['/']">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+        </a>
+        <h1 class="font-heading text-lg sm:text-xl font-semibold text-slate-800">Account Dashboard</h1>
+      </div>
+      @if(currentUser.currentUser.login !== 'ADMIN'){
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm sm:text-base font-bold shadow-sm ring-2 ring-white cursor-default" title="{{ currentUser.currentUser.firstName }} {{ currentUser.currentUser.lastName }}">
+          {{ currentUser.currentUser.firstName.charAt(0).toUpperCase() }}{{ currentUser.currentUser.lastName.charAt(0).toUpperCase() }}
+        </div>
+      } @else {
+        <div class="px-3 py-1 bg-rose-50 text-rose-600 text-[10px] sm:text-xs font-bold rounded-full border border-rose-100 uppercase tracking-wider">
+          Admin Portal
+        </div>
+      }
     </div>
+  </header>
 
-    <!--Link to the 'operations' page-->
-    <a class="underline text-[var(--text-page-heading)]" [routerLink]="['/operations']">Add operation</a>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+    <!-- Non-Admin View -->
+    @if(currentUser.currentUser.login !== 'ADMIN'){
+      
+      <!-- Welcome Header -->
+      <div class="mb-8">
+        <h2 class="text-3xl font-heading font-bold text-slate-900 tracking-tight">
+          Welcome back, <span class="bg-clip-text text-transparent bg-gradient-to-r from-[var(--accent-color)] to-indigo-600">{{ currentUser.currentUser.firstName }}</span>
+        </h2>
+        <p class="text-slate-500 mt-1">Here's an overview of your account today.</p>
+      </div>
 
-    <!--Link to the 'balances' page-->
-    <a class="underline text-[var(--text-page-heading)]" [routerLink]="['/balances']">View my balance info</a>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Balance Card -->
+        <div class="lg:col-span-8">
+          <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm relative overflow-hidden group">
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div>
+                <p class="text-sm font-medium text-slate-500 mb-1 flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+                  Available Balance
+                </p>
+                <h3 class="font-heading text-4xl sm:text-5xl font-bold text-slate-900">{{ currentUser.currentUser.balance }} <span class="text-2xl text-slate-400 font-medium ml-1">сум</span></h3>
+              </div>
+              
+              <!-- Quick Actions -->
+              <div class="flex flex-col sm:flex-row md:flex-col gap-3">
+                <a class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-[var(--accent-color)] hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl font-medium transition-transform transform hover:-translate-y-0.5 shadow-sm" [routerLink]="['/operations']">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                  Transfer Money
+                </a>
+                <a class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 px-5 py-2.5 rounded-xl font-medium transition-colors" [routerLink]="['/balances']">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                  View History
+                </a>
+              </div>
+            </div>
+            <!-- Decorative circle -->
+            <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-slate-50 rounded-full border border-slate-100 transition-transform group-hover:scale-105 duration-500"></div>
+          </div>
+        </div>
 
-    <!--Button to quit the account-->
-    <button class="primary-btn" (click)="currentUser.quitAccount()">Quit Account</button>
-  </section>
-  } 
-  <!--Display if the user is ADMIN-->
-  @else if(currentUser.currentUser.login === 'ADMIN'){
-  <!--Main heading of the page for the admin user-->
-  <h1 class="page-heading">Accounts</h1>
-  <!--Main content of the page for admin users-->
-  <section class="table-container w-200">
-    <!--Heading of the section-->
-    <h2 class="sub-page-heading">Users registred:</h2>
-    <!--If the 'users' array is not empty-->
-    @if(users.length > 0) {
-    <!--table with user's name, login and password-->
-    <table class="customized-table">
-      <thead>
-        <tr>
-          <th class="rounded-tl-2xl">Login</th>
-          <th>First name</th>
-          <th>Last name</th>
-          <th>Password</th>
-          <th class="rounded-tr-2xl"></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for(user of users; track $index) {
-        <tr>
-          <td>{{ user.login }}</td>
-          <td>{{ user.firstName.toUpperCase() }}</td>
-          <td>{{ user.lastName.toUpperCase() }}</td>
-          <td>{{ user.password }}</td>
-          <td>
-            <img class="w-8 h-8 mx-auto" src="trash.svg" alt="Image of the trash icon used as a button to delete a user" (click)="deleteAcc($index)"/>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
+        <!-- Profile Details -->
+        <div class="lg:col-span-4">
+          <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm h-full flex flex-col justify-between relative overflow-hidden">
+            <div class="relative z-10">
+              <h4 class="font-heading font-semibold text-slate-800 text-lg mb-6 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                Profile Info
+              </h4>
+              <div class="space-y-5">
+                <div>
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Full Name</span>
+                  <p class="font-medium text-slate-900 text-lg">{{ currentUser.currentUser.firstName }} {{ currentUser.currentUser.lastName }}</p>
+                </div>
+                <div>
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Username / Login</span>
+                  <div class="inline-flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
+                    <span class="text-slate-400">@</span>
+                    <p class="font-mono font-medium text-slate-700">{{ currentUser.currentUser.login }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="w-full mt-6 bg-rose-50 hover:bg-rose-100 text-rose-600 font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 relative z-10" (click)="currentUser.quitAccount()">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+              Sign Out Securely
+            </button>
+          </div>
+        </div>
+        
+      </div>
     } 
-    <!--It the 'users' array is empty-->
-    @else {
-    <p class="text-[var(--text-page-content)] text-2xl text-center mb-5">No users yet :\</p>
-    }
+    <!-- Admin View -->
+    @else if(currentUser.currentUser.login === 'ADMIN'){
+      
+      <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <h2 class="text-3xl lg:text-4xl font-heading font-bold text-slate-900 tracking-tight">User Management</h2>
+          <p class="text-slate-500 mt-2">Manage registered accounts, review credentials, and control access.</p>
+        </div>
+        <a class="inline-flex items-center justify-center gap-2 bg-[var(--accent-color)] hover:bg-blue-600 text-white px-5 py-3 rounded-xl font-medium transition-colors shadow-sm" [routerLink]="['/registration']">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+          Add New User
+        </a>
+      </div>
 
-    <!--Link to the 'registration' page-->
-    <a class="text-[var(--text-page-heading)] underline text-center" [routerLink]="['/registration']">Create a new account</a>
-  </section>
-  }
-</main>
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.03)] overflow-hidden">
+        @if(users.length > 0) {
+          <div class="table-responsive-wrapper pt-4">
+            <table class="w-full border-collapse">
+              <thead class="bg-slate-50 border-y border-slate-200 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                <tr>
+                  <th class="px-6 py-4">User</th>
+                  <th class="px-6 py-4">Login</th>
+                  <th class="px-6 py-4">Password</th>
+                  <th class="px-6 py-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                @for(user of users; track $index) {
+                <tr class="hover:bg-slate-50/70 transition-colors group">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-full bg-blue-100 border border-blue-200 text-blue-600 flex items-center justify-center font-bold text-sm">
+                        {{ user.firstName.charAt(0).toUpperCase() }}{{ user.lastName.charAt(0).toUpperCase() }}
+                      </div>
+                      <span class="font-medium text-slate-900">{{ user.firstName }} {{ user.lastName }}</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="text-slate-600 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg text-sm font-medium">@{{ user.login }}</span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center gap-2 group/pass cursor-pointer">
+                      <span class="text-slate-400 group-hover/pass:hidden text-lg tracking-widest mt-1">••••••••</span>
+                      <span class="text-slate-700 bg-amber-50 border border-amber-100 px-3 py-1.5 rounded-lg text-sm font-mono font-medium hidden group-hover/pass:block">{{ user.password }}</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-300 group-hover/pass:text-amber-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right">
+                    <button class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors focus:outline-none" (click)="deleteAcc($index)" title="Delete User">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="p-16 text-center flex flex-col items-center justify-center">
+            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-5 text-slate-300 border border-slate-100">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+            </div>
+            <h3 class="text-xl font-medium text-slate-900 mb-2">No users found</h3>
+            <p class="text-slate-500 max-w-sm">There are currently no registered users in the platform. Add users to see them listed here.</p>
+          </div>
+        }
+      </div>
+    }
+  </main>
+</div>

@@ -1,112 +1,144 @@
-<main class="h-screen flex items-center">
-  <a class="back-btn" [routerLink]="['/']"><img src="left-arrow.svg" alt="Image of the arrow directed left used as a button to go back to the main page" /></a>
+<div class="min-h-screen flex flex-col justify-center items-center bg-[var(--bg-primary-color)] p-4 relative py-12">
+  <!-- Back Button -->
+  <a class="absolute top-6 left-6 back-btn flex items-center justify-center bg-white border border-[var(--border-color)] hover:bg-slate-50 text-slate-600 w-12 h-12 rounded-full shadow-sm hover:shadow transition-all group" [routerLink]="['/']">
+     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+  </a>
+
+  <!-- Header Text -->
+  <div class="mb-8 text-center max-w-sm mt-8 sm:mt-0">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white shadow-sm border border-slate-100 mb-6 text-emerald-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+      </div>
+      <h1 class="font-heading text-3xl font-bold text-slate-900 mb-3 tracking-tight">Create Account</h1>
+      <p class="text-slate-500">Join thousands of users managing their secure wallet today.</p>
+  </div>
+
   <div class="form-container">
-    <h1 class="page-heading">Registration</h1>
-
-    <form class="flex flex-col" [formGroup]="profileForm" (submit)="createNewUser()">
-      <!--First name-->
-      <input class="input-field" type="text" placeholder="First name" formControlName="firstName" />
-      <div class="error-container">
-        @if(profileForm.controls.firstName.invalid && profileForm.controls.firstName.dirty){
-          @if(profileForm.controls.firstName.errors?.['required']){
-            <small>*First name cannot be empty</small>
-          } 
-          @else if(profileForm.controls.firstName.errors?.['pattern']){
-            <small>*First name must contain only LATIN letters without any spaces!</small>
-          } 
-          @else if(profileForm.controls.firstName.errors?.['minlength']){
-            <small>*First name must contain at least 3 symbols!</small>
-          } 
-        }
+    <form class="flex flex-col gap-1 w-full" [formGroup]="profileForm" (submit)="createNewUser()">
+        <div class="grid grid-cols-2 gap-4">
+            <!-- First Name -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1.5 ml-1">First Name</label>
+                <input class="input-field" type="text" placeholder="John" formControlName="firstName" />
+                <div class="error-container">
+                    @if(profileForm.controls.firstName.invalid && profileForm.controls.firstName.dirty){
+                    @if(profileForm.controls.firstName.errors?.['required']){
+                        <small>*Required.</small>
+                    } 
+                    @else if(profileForm.controls.firstName.errors?.['pattern']){
+                        <small>*Only LATIN letters.</small>
+                    } 
+                    @else if(profileForm.controls.firstName.errors?.['minlength']){
+                        <small>*Min 3 chars.</small>
+                    } 
+                    }
+                </div>
+            </div>
+            
+            <!-- Last Name -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Last Name</label>
+                <input class="input-field" type="text" placeholder="Doe" formControlName="lastName" />
+                <div class="error-container">
+                    @if(profileForm.controls.lastName.invalid&&profileForm.controls.lastName.dirty){
+                    @if(profileForm.controls.lastName.errors?.['required']){
+                        <small>*Required.</small>
+                    }
+                    @else if(profileForm.controls.lastName.errors?.['pattern']){
+                        <small>*Only LATIN letters.</small>
+                    }
+                    @else if(profileForm.controls.lastName.errors?.['minlength']){
+                        <small>*Min 3 chars.</small>
+                    } 
+                    }
+                </div>
+            </div>
+        </div>
+      
+      <!-- Login -->
+      <div class="mt-2">
+        <label class="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Username</label>
+        <input class="input-field" type="text" placeholder="Choose a username" formControlName="login" />
+        <div class="error-container">
+            @if(profileForm.controls.login.invalid && profileForm.controls.login.dirty){
+            @if(profileForm.controls.login.errors?.['required']){
+                <small>*Username is required.</small>
+            }
+            @else if(profileForm.controls.login.errors?.['pattern']){
+                <small>*Only LATIN letters without spaces.</small>
+            }
+            @else if(profileForm.controls.login.errors?.['minlength']){
+                <small>*Min 3 chars.</small>
+            }
+            @if(profileForm.controls.login.errors?.['loginNotUnique']){
+                <small>*Username is already taken.</small>
+            }
+            }
+            @else if(profileForm.controls.login.valid){
+            <small class="text-emerald-500">*Username is available</small>
+            }
+        </div>
       </div>
 
-      <!--Last name-->
-      <input class="input-field" type="text" placeholder="Last name" formControlName="lastName" />
-      <div class="error-container">
-        @if(profileForm.controls.lastName.invalid&&profileForm.controls.lastName.dirty){
-          @if(profileForm.controls.lastName.errors?.['required']){
-            <small>*Last name cannot be empty!</small>
-          }
-          @else if(profileForm.controls.lastName.errors?.['pattern']){
-            <small>*Last name must contain only LATIN letters without any spaces!</small>
-          }
-          @else if(profileForm.controls.lastName.errors?.['minlength']){
-            <small>*Last name must contain at least 3 symbols!</small>
-          } 
-        }
+      <!-- Password -->
+      <div class="mt-2">
+        <label class="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Password</label>
+        <div class="relative">
+            <input class="input-field pr-12" [type]="show() ? 'text' : 'password'" placeholder="Create a password" formControlName="password" />
+            <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none p-1" (click)="show.set(!show())">
+            @if(show()) {
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+            } @else {
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+            }
+            </button>
+        </div>
+        <div class="error-container">
+            @if(profileForm.controls.password.invalid && profileForm.controls.password.dirty){
+            @if(profileForm.controls.password.errors?.['required']){
+                <small>*Password is required.</small>
+            }
+            @else if(profileForm.controls.password.errors?.['minlength']){
+                <small>*Min 3 chars.</small>
+            } 
+            }
+        </div>
       </div>
 
-      <!--Login-->
-      <input class="input-field" type="text" placeholder="Login" formControlName="login" />
-      <div class="error-container">
-        @if(profileForm.controls.login.invalid && profileForm.controls.login.dirty){
-          @if(profileForm.controls.login.errors?.['required']){
-            <small>*Login cannot be empty!</small>
-          }
-          @else if(profileForm.controls.login.errors?.['pattern']){
-            <small>*Login must contain only LATIN letters without any spaces!</small>
-          }
-          @else if(profileForm.controls.login.errors?.['minlength']){
-            <small>*Login must contain at least 3 symbols!</small>
-          }
-          @if(profileForm.controls.login.errors?.['loginNotUnique']){
-            <small>*User with the same login already exists!</small>
-          }
-        }
-        @else if(profileForm.controls.login.valid){
-          <small class="text-green-500">*This login is available</small>
-        }
+      <!-- Password Confirmation -->
+      <div class="mt-2">
+        <label class="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Confirm Password</label>
+        <div class="relative">
+            <input class="input-field pr-12" [type]="show() ? 'text' : 'password'" placeholder="Repeat password" formControlName="passwordConfrim" />
+            <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none p-1" (click)="show.set(!show())">
+            @if(show()) {
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+            } @else {
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+            }
+            </button>
+        </div>
+        <div class="error-container">
+            @if(profileForm.controls.password.valid && profileForm.controls.passwordConfrim.dirty && profileForm.controls.passwordConfrim.errors?.['required'] && profileForm.controls.password.dirty){
+                <small>*Please confirm your password.</small>
+            }
+            @else if(profileForm.errors?.['passwordsDoNotMatch'] && profileForm.controls.passwordConfrim.dirty){
+            <small>*Passwords do not match!</small>
+            }
+        </div>
       </div>
-
-      <!--Password-->
-      <div class="flex">
-        <input
-          class="input-field w-[50%]"
-          [type]="show() ? 'text' : 'password'"
-          placeholder="Password"
-          formControlName="password"
-        />
-        <img
-          class="w-6 m-2"
-          [src]="show() ? 'password-eye.svg' : 'password-eye-closed.svg'"
-          [alt]="show() ? 'Image of the opened eye used as a button to show the content of the password':'Image of the closed eye used as a button to hide the content of the password'"
-          (click)="show.set(!show())"
-        />
-      </div>
-      <div class="error-container">
-        @if(profileForm.controls.password.invalid && profileForm.controls.password.dirty){
-          @if(profileForm.controls.password.errors?.['required']){
-            <small>*Password field cannot be empty!</small>
-          }
-          @else if(profileForm.controls.password.errors?.['minlength']){
-            <small>*Password must contain at least 3 symbols!</small>
-          } 
-        }
-      </div>
-
-      <!--Password confrimation-->
-      <div>
-        <input
-          class="input-field w-[50%]" 
-          [type]="show()? 'text':'password'"
-          placeholder="Confrim password"
-          formControlName="passwordConfrim"
-        />
-      </div>
-      <div class="error-container">
-        @if(profileForm.controls.password.valid && profileForm.controls.passwordConfrim.dirty && profileForm.controls.passwordConfrim.errors?.['required'] && profileForm.controls.password.dirty){
-            <small>*Please confrim your password!</small>
-        }
-        @else if(profileForm.errors?.['passwordsDoNotMatch'] && profileForm.controls.passwordConfrim.dirty){
-          <small>*Passwords do not match!</small>
-         }
-      </div>
-
-      <!--Submit button-->
-      <button class="primary-btn" [disabled]="profileForm.invalid" type="submit">Register</button>
+  
+      <!-- Submit Button -->
+      <button class="primary-btn mt-6" [type]="profileForm.invalid ? 'button' : 'submit'" [disabled]="profileForm.invalid">
+        Create Valid Account
+      </button>
+      
+      <!-- Redirect Link -->
+      <p class="text-sm font-medium text-slate-500 text-center mt-8">
+        Already have an account? 
+        <a class="text-blue-600 hover:text-blue-700 font-semibold underline decoration-blue-200 hover:decoration-blue-500 transition-all ml-1" [routerLink]="['/login']">Log In</a>
+      </p>
 
     </form>
-    
-    <p class="text-[var(--text-page-content)] text-center">Already have an account? <a class="text-[var(--text-page-heading)] underline" [routerLink]="['/login']">Login</a></p>
   </div>
-</main>
+</div>

@@ -1,81 +1,167 @@
-<main>
-  <!--Button to go back to the main page-->
-  <a class="back-btn" [routerLink]="['/']"
-    ><img
-      src="left-arrow.svg"
-      alt="Image of arrow directed left used as a button to go back to the main page"
-  /></a>
+<div class="min-h-screen bg-[var(--bg-primary-color)] pb-12">
+  <!-- Top Navigation Bar -->
+  <header class="bg-white/80 backdrop-blur-md border-b border-[var(--border-color)] sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <a class="flex items-center justify-center bg-white border border-[var(--border-color)] hover:bg-slate-50 text-slate-500 hover:text-[var(--accent-color)] w-9 h-9 rounded-full transition-all shadow-sm" [routerLink]="['/']">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+        </a>
+        <h1 class="font-heading text-lg sm:text-xl font-semibold text-slate-800">Balances overview</h1>
+      </div>
+      @if(currentUser.currentUser.login !== 'ADMIN'){
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm sm:text-base font-bold shadow-sm ring-2 ring-white cursor-default">
+          {{ currentUser.currentUser.firstName.charAt(0).toUpperCase() }}{{ currentUser.currentUser.lastName.charAt(0).toUpperCase() }}
+        </div>
+      } @else {
+        <div class="px-3 py-1 bg-rose-50 text-rose-600 text-[10px] sm:text-xs font-bold rounded-full border border-rose-100 uppercase tracking-wider">
+          Admin Portal
+        </div>
+      }
+    </div>
+  </header>
 
-  <!--Main heading of the page-->
-  <h1 class="page-heading">Balances</h1>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
 
-  <!--Display for non-admin users-->
-  @if(currentUser.currentUser.login !== 'ADMIN') {
-  <!--Main content for non-admin users-->
-  <section class="table-container w-170">
-    <h2 class="sub-page-heading">Balance: <span class="font-normal text-[var(--text-page-content)]">{{ currentUser.currentUser.balance }} сум</span></h2>
-    <h2 class="sub-page-heading">Recent operations</h2>
-    <!--Display if the user has any operations-->
-    @if(userOperations.length>0){
-      <!--Table with content-->
-      <table class="customized-table">
-        <thead>
-          <tr>
-            <th class="rounded-tl-2xl">From</th>
-            <th>To</th>
-            <th>Amount</th>
-            <th class="rounded-tr-2xl">Date & Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for(operation of operations; track $index){
-          @if(currentUser.currentUser.login === operation.from ||
-          currentUser.currentUser.login === operation.to){
-          <tr>
-            <td>{{ operation.from }}</td>
-            <td>{{ operation.to }}</td>
-            <td>{{ operation.amount }}</td>
-            <td>{{ operation.dateTime }}</td>
-          </tr>
-          } }
-        </tbody>
-      </table>
-    }
-    <!--Display if the user does not have any operations yet-->
-    @else{
-      <p class="text-[var(--text-page-content)] text-2xl text-center">No any recent operations yet :/</p>
-    }
-  </section>
-  } 
-  <!--Display for admin user-->
-  @else if(currentUser.currentUser.login === 'ADMIN') {
-  <!--Main content for admin user-->
-  <section class="table-container w-200">
-    <h2 class="sub-page-heading">Balances of all users:</h2>
-    <!--Dsplay if 'users' array is not empty (users exists)-->
-    @if(users.length > 0) {
-    <!--Table with content-->
-    <table class="customized-table">
-      <thead>
-        <tr>
-          <th class="rounded-tl-2xl">Login</th>
-          <th class="rounded-tr-2xl">Balance</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (user of users; track $index) {
-        <tr>
-          <td>{{ user.login }}</td>
-          <td>{{ user.balance }} сум</td>
-        </tr>
+    <!-- Non-Admin View -->
+    @if(currentUser.currentUser.login !== 'ADMIN') {
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+        <!-- Main Balance Widget -->
+        <div class="lg:col-span-12">
+          <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative overflow-hidden">
+            <div class="relative z-10">
+              <span class="text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-widest block mb-2">Total Balance</span>
+               <h2 class="font-heading text-4xl sm:text-6xl font-bold text-slate-900 tracking-tight">{{ currentUser.currentUser.balance }} <span class="text-2xl sm:text-3xl text-slate-300 font-medium ml-1">сум</span></h2>
+            </div>
+            <div class="relative z-10">
+              <a class="inline-flex items-center justify-center gap-2 bg-[var(--accent-color)] hover:bg-blue-600 text-white px-6 py-3 sm:py-4 rounded-xl font-medium transition-transform transform hover:-translate-y-0.5 shadow-sm" [routerLink]="['/operations']">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                New Transfer
+              </a>
+            </div>
+            <!-- Decorative blur -->
+            <div class="absolute -right-12 -top-12 w-64 h-64 bg-blue-50 rounded-full blur-3xl opacity-60"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Operations -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.03)] overflow-hidden">
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+          <h3 class="font-heading text-lg font-bold text-slate-800 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            Recent Operations
+          </h3>
+        </div>
+        
+        @if(userOperations.length > 0){
+          <div class="table-responsive-wrapper">
+            <table class="w-full border-collapse">
+              <thead class="bg-slate-50 border-b border-slate-200 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                <tr>
+                  <th class="px-6 py-4">From</th>
+                  <th class="px-6 py-4">To</th>
+                  <th class="px-6 py-4">Amount</th>
+                  <th class="px-6 py-4 text-right">Date & Time</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                @for(operation of operations; track $index){
+                  @if(currentUser.currentUser.login === operation.from || currentUser.currentUser.login === operation.to){
+                    <tr class="hover:bg-slate-50/70 transition-colors group">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-sm font-medium" 
+                              [class.bg-[var(--accent-color)]]="operation.from === currentUser.currentUser.login"
+                              [class.text-white]="operation.from === currentUser.currentUser.login"
+                              [class.bg-slate-100]="operation.from !== currentUser.currentUser.login"
+                              [class.text-slate-600]="operation.from !== currentUser.currentUser.login">
+                          @{{ operation.from }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-sm font-medium" 
+                              [class.bg-[var(--accent-color)]]="operation.to === currentUser.currentUser.login"
+                              [class.text-white]="operation.to === currentUser.currentUser.login"
+                              [class.bg-slate-100]="operation.to !== currentUser.currentUser.login"
+                              [class.text-slate-600]="operation.to !== currentUser.currentUser.login">
+                          @{{ operation.to }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="font-bold text-slate-800"
+                              [class.text-rose-500]="operation.from === currentUser.currentUser.login"
+                              [class.text-emerald-500]="operation.to === currentUser.currentUser.login">
+                          {{ operation.from === currentUser.currentUser.login ? '-' : '+' }}{{ operation.amount }} сум
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-slate-500 font-medium">
+                        {{ operation.dateTime }}
+                      </td>
+                    </tr>
+                  } 
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="p-16 text-center flex flex-col items-center justify-center">
+            <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4 text-slate-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            </div>
+            <h3 class="text-lg font-medium text-slate-900 mb-1">No operations yet</h3>
+            <p class="text-slate-500 text-sm">You haven't made or received any transfers yet.</p>
+          </div>
         }
-      </tbody>
-    </table>
+      </div>
+
+    } 
+    <!-- Admin View -->
+    @else if(currentUser.currentUser.login === 'ADMIN') {
+      
+      <div class="mb-8">
+        <h2 class="text-3xl font-heading font-bold text-slate-900 tracking-tight">User Balances</h2>
+        <p class="text-slate-500 mt-1">Review the financial standing of all registered accounts.</p>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.03)] overflow-hidden">
+        @if(users.length > 0) {
+          <div class="table-responsive-wrapper pt-2">
+            <table class="w-full border-collapse">
+              <thead class="bg-slate-50 border-y border-slate-200 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                <tr>
+                  <th class="px-6 py-4">User Login</th>
+                  <th class="px-6 py-4 text-right">Current Balance</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                @for (user of users; track $index) {
+                <tr class="hover:bg-slate-50/70 transition-colors group">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center gap-3">
+                       <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 shadow-inner">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                       </div>
+                       <span class="font-medium text-slate-800">@{{ user.login }}</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right">
+                    <span class="font-bold text-slate-900 text-lg">{{ user.balance }} <span class="text-sm text-slate-400 font-medium ml-1">сум</span></span>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="p-16 text-center flex flex-col items-center justify-center">
+            <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4 text-slate-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+            </div>
+            <h3 class="text-lg font-medium text-slate-900 mb-1">No users found</h3>
+            <p class="text-slate-500 text-sm">There are no user balances to display.</p>
+          </div>
+        }
+      </div>
     }
-    <!--Display if there no any users yet-->
-    @else{
-    <p class="text-[var(--text-page-content)] text-2xl text-center">No users yet :\</p>
-    }
-  </section>
-  }
-</main>
+  </main>
+</div>
